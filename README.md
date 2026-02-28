@@ -93,16 +93,10 @@ This prevents pip from replacing torch.
 
 Examples:
 
--   numpy\<2
 -   scipy
 -   matplotlib
 -   libsndfile
 
-Always pin NumPy:
-
-``` bash
-numpy<2
-```
 
 ------------------------------------------------------------------------
 
@@ -113,8 +107,8 @@ micromamba create -n causal python=3.10 -y
 micromamba activate causal
 
 export PYTHONNOUSERSITE=1
-
 python -m pip install -U pip setuptools wheel "numpy<2"
+python -m pip install --no-cache-dir \
 
 python -m pip install --no-cache-dir \
 "https://developer.download.nvidia.com/compute/redist/jp/v61/pytorch/torch-2.5.0a0+872d972e41.nv24.08.17622132-cp310-cp310-linux_aarch64.whl"
