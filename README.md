@@ -108,8 +108,8 @@ micromamba activate causal
 
 export PYTHONNOUSERSITE=1
 python -m pip install -U pip setuptools wheel "numpy<2"
-python -m pip install --no-cache-dir \
 
+python -m pip install --no-cache-dir \
 "https://developer.download.nvidia.com/compute/redist/jp/v61/pytorch/torch-2.5.0a0+872d972e41.nv24.08.17622132-cp310-cp310-linux_aarch64.whl"
 ```
 
@@ -274,7 +274,7 @@ timm
 
 ------------------------------------------------------------------------
 
-## 6. Transformers Compatibility Fix
+## 6. Transformers Compatibility Fix For Issues with GreedySearchDecoderOnlyOutput
 
 Add this shim near the top of your model file:
 
@@ -304,16 +304,32 @@ except ImportError:
 ## 7. Environment Backup (Recommended)
 
 ``` bash
-conda-pack -n causal -o causal_env.tar.gz
+conda-pack -n causal -o causal_mamba_working.tar.gz
 ```
 
 Restore:
 
 ``` bash
-mkdir -p ~/micromamba/envs/causal_restore
-tar -xzf causal_env.tar.gz -C ~/micromamba/envs/causal_restore
-~/micromamba/envs/causal_restore/bin/conda-unpack
-micromamba activate causal_restore
+#Restoring ENV from anywhere
+mkdir -p ~/micromamba/envs/causal_mamba_working
+
+# unpack the conda-pack tarball into it
+tar -xzf ~/causal_mamba_working.tar.gz -C ~/micromamba/envs/causal_mamba_working
+
+#sanity check
+ls ~/micromamba/envs/causal_mamba_working | head
+ls ~/micromamba/envs/causal_mamba_working/bin | head
+
+#unpack
+# run the env’s conda-unpack script
+~/micromamba/envs/causal_mamba_working/bin/conda-unpack
+
+#this might not work but run
+source ~/micromamba/etc/profile.d/micromamba.sh
+
+#activate
+micromamba activate causal_mamba_working
+
 ```
 
 ------------------------------------------------------------------------
@@ -334,9 +350,3 @@ micromamba activate causal_restore
 -   JetPack 6.x
 -   CUDA 12.x
 -   Python 3.10
-
-------------------------------------------------------------------------
-
-## License
-
-MIT
